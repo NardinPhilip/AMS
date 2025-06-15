@@ -1,0 +1,33 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
+import Dashboard from './pages/Dashboard';
+import AssetRegistry from './pages/AssetRegistry';
+import AuditTasks from './pages/AuditTasks';
+import AssignAssets from './pages/AssignAssets';
+import Analytics from './pages/Analytics';
+
+import SettingsIcon from './pages/Settings';
+import MaintenanceRequests from './pages/MaintenanceRequests'; // Import the MaintenanceRequests component
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="registry" element={<AssetRegistry />} />
+          <Route path="audit-tasks" element={<AuditTasks />} />
+          <Route path="assign-assets" element={<AssignAssets />} />
+          <Route path="analytics" element={<Analytics />} />
+
+          <Route path="generate-assets" element={<AssetRegistry />} />
+          <Route path="profile" element={<Dashboard />} /> {/* Placeholder; create Profile if needed */}
+          <Route path="settings" element={<SettingsIcon />} />
+          <Route path="maintenance-requests" element={<MaintenanceRequests />} /> {/* Add this route */}
+        </Route>
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
