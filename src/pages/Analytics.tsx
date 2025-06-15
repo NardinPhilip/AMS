@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TrendingUp, BarChart3, PieChart, Activity, DollarSign, Calendar } from 'lucide-react';
+import { TrendingUp, BarChart3, PieChart, Activity, DollarSign, Calendar, TrendingDown } from 'lucide-react';
 import { ChartConfiguration } from 'chart.js/auto';
 import ChartCard from '../components/ChartCard';
 import MetricCard from '../components/MetricCard';
@@ -67,39 +67,6 @@ export default function Analytics() {
     }
   };
 
-  const utilizationRateConfig: ChartConfiguration = {
-    type: 'bar',
-    data: {
-      labels: ['Main Branch', 'North Branch', 'East Branch'],
-      datasets: [{
-        label: 'Utilization Rate (%)',
-        data: [87, 92, 78],
-        backgroundColor: '#10b981',
-        borderRadius: 8,
-        borderSkipped: false
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        y: {
-          beginAtZero: true,
-          max: 100,
-          grid: { color: '#e2e8f0' },
-          ticks: { font: { size: 12 } }
-        },
-        x: {
-          grid: { display: false },
-          ticks: { font: { size: 12 } }
-        }
-      },
-      plugins: {
-        legend: { display: false }
-      }
-    }
-  };
-
   const depreciationConfig: ChartConfiguration = {
     type: 'line',
     data: {
@@ -161,6 +128,38 @@ export default function Analytics() {
     }
   };
 
+  const maintenanceCostConfig: ChartConfiguration = {
+    type: 'bar',
+    data: {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+      datasets: [{
+        label: 'Maintenance Costs ($K)',
+        data: [8.2, 12.5, 9.8, 15.2, 11.3, 7.9],
+        backgroundColor: '#ef4444',
+        borderRadius: 8,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { color: '#e2e8f0' },
+          ticks: { font: { size: 12 } }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { font: { size: 12 } }
+        }
+      },
+      plugins: {
+        legend: { display: false }
+      }
+    }
+  };
+
   return (
     <>
       {/* Header */}
@@ -214,11 +213,11 @@ export default function Analytics() {
           color="purple"
         />
         <MetricCard
-          title="Efficiency Score"
-          value="94.2%"
-          icon={Activity}
-          trend={{ value: 2.3, isPositive: true }}
-          color="green"
+          title="Depreciation Rate"
+          value="18.5%"
+          icon={TrendingDown}
+          trend={{ value: -2.3, isPositive: true }}
+          color="red"
         />
       </div>
 
@@ -235,7 +234,7 @@ export default function Analytics() {
         <MetricCard
           title="Monthly Depreciation"
           value="$12.5K"
-          icon={TrendingUp}
+          icon={TrendingDown}
           trend={{ value: -2.1, isPositive: false }}
           color="yellow"
           className="md:col-span-1"
@@ -266,14 +265,14 @@ export default function Analytics() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <ChartCard
-          title="Utilization Rate by Branch"
-          icon={<BarChart3 className="w-5 h-5 text-blue-600" />}
-          chartConfig={utilizationRateConfig}
+          title="Depreciation Curves"
+          icon={<TrendingDown className="w-5 h-5 text-blue-600" />}
+          chartConfig={depreciationConfig}
         />
         <ChartCard
-          title="Depreciation Curves"
+          title="Maintenance Costs"
           icon={<Activity className="w-5 h-5 text-blue-600" />}
-          chartConfig={depreciationConfig}
+          chartConfig={maintenanceCostConfig}
         />
       </div>
 
@@ -289,7 +288,7 @@ export default function Analytics() {
               <h3 className="font-semibold text-blue-900">Performance</h3>
             </div>
             <p className="text-sm text-blue-800">
-              Asset utilization has increased by 12% this quarter, with the North Branch leading performance metrics.
+              Asset value has increased by 15% this quarter, with electronics showing the strongest performance.
             </p>
           </div>
 
@@ -308,12 +307,12 @@ export default function Analytics() {
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
             <div className="flex items-center space-x-3 mb-3">
               <div className="w-8 h-8 bg-amber-600 rounded-lg flex items-center justify-center">
-                <Activity className="w-4 h-4 text-white" />
+                <TrendingDown className="w-4 h-4 text-white" />
               </div>
-              <h3 className="font-semibold text-amber-900">Recommendations</h3>
+              <h3 className="font-semibold text-amber-900">Depreciation</h3>
             </div>
             <p className="text-sm text-amber-800">
-              Consider upgrading electronics assets older than 4 years to improve efficiency and reduce maintenance costs.
+              Electronics depreciate fastest at 25% annually, while furniture maintains value better at 15% annually.
             </p>
           </div>
         </div>

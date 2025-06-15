@@ -5,9 +5,9 @@ import AssetRegistry from './pages/AssetRegistry';
 import AuditTasks from './pages/AuditTasks';
 import AssignAssets from './pages/AssignAssets';
 import Analytics from './pages/Analytics';
-
-import SettingsIcon from './pages/Settings';
-import MaintenanceRequests from './pages/MaintenanceRequests'; // Import the MaintenanceRequests component
+import Settings from './pages/Settings';
+import MaintenanceRequests from './pages/MaintenanceRequests';
+import HelpDesk from './pages/HelpDesk';
 
 function App() {
   return (
@@ -19,11 +19,11 @@ function App() {
           <Route path="audit-tasks" element={<AuditTasks />} />
           <Route path="assign-assets" element={<AssignAssets />} />
           <Route path="analytics" element={<Analytics />} />
-
           <Route path="generate-assets" element={<AssetRegistry />} />
-          <Route path="profile" element={<Dashboard />} /> {/* Placeholder; create Profile if needed */}
-          <Route path="settings" element={<SettingsIcon />} />
-          <Route path="maintenance-requests" element={<MaintenanceRequests />} /> {/* Add this route */}
+          <Route path="profile" element={<Dashboard />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="maintenance-requests" element={<MaintenanceRequests />} />
+          <Route path="help-desk" element={<HelpDesk />} />
         </Route>
       </Routes>
     </Router>

@@ -1,4 +1,4 @@
-import { BarChart3, PieChart, Users, Clock, Package, AlertTriangle, TrendingUp, Shield } from 'lucide-react';
+import { BarChart3, PieChart, Users, Clock, Package, AlertTriangle, TrendingUp, TrendingDown } from 'lucide-react';
 import { ChartConfiguration } from 'chart.js/auto';
 
 import Filters from '../components/Filters';
@@ -82,17 +82,33 @@ export default function Dashboard() {
     }
   };
 
-  const ownershipPeriodConfig: ChartConfiguration = {
-    type: 'bar',
+  const depreciationConfig: ChartConfiguration = {
+    type: 'line',
     data: {
-      labels: filteredData.ownershipPeriod.map(item => item.branch),
-      datasets: [{
-        label: 'Avg Ownership Period (Years)',
-        data: filteredData.ownershipPeriod.map(item => item.avgPeriod),
-        backgroundColor: '#10b981',
-        borderRadius: 8,
-        borderSkipped: false
-      }]
+      labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+      datasets: [
+        {
+          label: 'Electronics',
+          data: [100, 75, 55, 40, 25],
+          borderColor: '#3b82f6',
+          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          tension: 0.4
+        },
+        {
+          label: 'Furniture',
+          data: [100, 85, 70, 60, 50],
+          borderColor: '#10b981',
+          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          tension: 0.4
+        },
+        {
+          label: 'Vehicles',
+          data: [100, 70, 50, 35, 25],
+          borderColor: '#f59e0b',
+          backgroundColor: 'rgba(245, 158, 11, 0.1)',
+          tension: 0.4
+        }
+      ]
     },
     options: {
       responsive: true,
@@ -100,8 +116,14 @@ export default function Dashboard() {
       scales: {
         y: {
           beginAtZero: true,
+          max: 100,
           grid: { color: '#e2e8f0' },
-          ticks: { font: { size: 12 } }
+          ticks: { 
+            font: { size: 12 },
+            callback: function(value) {
+              return value + '%';
+            }
+          }
         },
         x: {
           grid: { display: false },
@@ -109,7 +131,14 @@ export default function Dashboard() {
         }
       },
       plugins: {
-        legend: { display: false }
+        legend: {
+          position: 'bottom',
+          labels: {
+            padding: 20,
+            usePointStyle: true,
+            font: { size: 12, weight: '500' }
+          }
+        }
       }
     }
   };
@@ -153,11 +182,11 @@ export default function Dashboard() {
           color="purple"
         />
         <MetricCard
-          title="Compliance Score"
-          value={`${mockMetrics.complianceScore}%`}
-          icon={Shield}
-          trend={{ value: 3, isPositive: true }}
-          color="green"
+          title="Monthly Depreciation"
+          value="$12.5K"
+          icon={TrendingDown}
+          trend={{ value: -2.1, isPositive: false }}
+          color="red"
         />
       </div>
 
@@ -213,9 +242,9 @@ export default function Dashboard() {
           chartConfig={ownershipChangesConfig}
         />
         <ChartCard
-          title="Average Ownership Period"
-          icon={<Clock className="w-5 h-5 text-blue-600" />}
-          chartConfig={ownershipPeriodConfig}
+          title="Depreciation Curves"
+          icon={<TrendingDown className="w-5 h-5 text-blue-600" />}
+          chartConfig={depreciationConfig}
           className="lg:col-span-2 xl:col-span-1"
         />
       </div>

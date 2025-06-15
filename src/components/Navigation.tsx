@@ -12,8 +12,8 @@ import {
   ClipboardCheck,
   UserCheck,
   TrendingUp,
-  Shield,
-  Wrench // Added Wrench icon
+  Wrench,
+  HelpCircle
 } from 'lucide-react';
 
 interface NavigationProps {
@@ -34,7 +34,8 @@ export default function Navigation({ isOpen, setIsOpen }: NavigationProps) {
     { path: '/', label: 'Dashboard', icon: BarChart3 },
     { path: '/registry', label: 'Asset Registry', icon: Database },
     { path: '/analytics', label: 'Analytics', icon: TrendingUp },
-    { path: '/maintenance-requests', label: 'Maintenance Requests', icon: Wrench }
+    { path: '/maintenance-requests', label: 'Maintenance Requests', icon: Wrench },
+    { path: '/help-desk', label: 'Help Desk', icon: HelpCircle }
   ];
 
   const assetManagementItems = [
