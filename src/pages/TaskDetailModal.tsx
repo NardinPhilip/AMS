@@ -17,7 +17,7 @@ import {
   QrCode
 } from 'lucide-react';
 import { AuditTask, ScanResult, MissingAsset, ScannedAsset } from '../types';
-import QRScanner from './QRScanner';
+import QRScanner from './QRscanner';
 
 interface TaskDetailModalProps {
   task: AuditTask | null;
