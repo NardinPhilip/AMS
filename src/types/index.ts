@@ -1,9 +1,9 @@
 export interface Asset {
   id: string;
   name: string;
-  category: 'Electronics' | 'Furniture' | 'Vehicles' | 'Equipment';
+  category: 'Electronics' | 'Furniture' | 'Vehicles' | 'Equipment' | 'Laptop' | 'Monitor' | 'Mobile' | 'Tablet' | 'Desktop';
   status: 'Active' | 'Inactive' | 'Under Maintenance' | 'Retired';
-  branch: 'Main Branch' | 'North Branch' | 'East Branch';
+  branch: 'Main Branch' | 'North Branch' | 'East Branch' | 'New York' | 'San Francisco' | 'Austin' | 'Seattle';
   assignedTo?: string;
   purchaseDate: string;
   purchasePrice: number;
@@ -14,6 +14,7 @@ export interface Asset {
   nextAuditDate?: string;
   condition: 'Excellent' | 'Good' | 'Fair' | 'Poor';
   warranty?: string;
+  warrantyExpiry?: string;
   vendor: string;
   description: string;
 }
@@ -78,6 +79,7 @@ export interface CreateTaskForm {
   dueDate: string;
   notes: string;
 }
+
 export interface User {
   id: string;
   name: string;
@@ -85,22 +87,8 @@ export interface User {
   department: string;
   role: 'Admin' | 'Manager' | 'Employee';
   branch: string;
-  assignedAssets: string[];
+  assignedAssets?: string[];
   avatar?: string;
-}
-
-export interface AuditTask {
-  id: string;
-  assetId: string;
-  assetName: string;
-  assignedTo: string;
-  dueDate: string;
-  status: 'Pending' | 'In Progress' | 'Completed' | 'Overdue';
-  priority: 'Low' | 'Medium' | 'High' | 'Critical';
-  type: 'Routine' | 'Compliance' | 'Maintenance' | 'Verification';
-  notes?: string;
-  completedDate?: string;
-  findings?: string;
 }
 
 export interface DashboardMetrics {
@@ -121,30 +109,7 @@ export interface FilterType {
   assignedTo: string;
   dateRange: string;
 }
-export interface MaintenanceRequest {
-  id: string;
-  assetId: string;
-  userId: string;
-  title: string;
-  description: string;
-  priority: 'low' | 'medium' | 'high' | 'urgent';
-  category: 'hardware' | 'software' | 'network' | 'other';
-  status: 'pending' | 'in-progress' | 'completed' | 'cancelled';
-  submittedDate: string;
-  assignedTo?: string;
-  estimatedCompletion?: string;
-  actualCompletion?: string;
-  notes?: string;
-  attachments?: MaintenanceAttachment[];
-}
 
-export interface MaintenanceAttachment {
-  id: string;
-  fileName: string;
-  fileUrl: string;
-  fileSize: number;
-  uploadDate: string;
-}
 export interface MaintenanceRequest {
   id: string;
   assetId: string;
@@ -167,6 +132,14 @@ export interface MaintenanceRequest {
   resolution?: string;
 }
 
+export interface MaintenanceAttachment {
+  id: string;
+  fileName: string;
+  fileUrl: string;
+  fileSize: number;
+  uploadDate: string;
+}
+
 export interface HelpDeskEmployee {
   id: string;
   name: string;
@@ -185,4 +158,23 @@ export interface Vendor {
   rating: number;
   responseTime: string;
   hourlyRate?: number;
+}
+
+export interface AssetAssignment {
+  id: string;
+  assetId: string;
+  userId: string;
+  assignedDate: string;
+  status: 'pending' | 'signed' | 'returned';
+}
+
+export interface HandoverForm {
+  id: string;
+  assetId: string;
+  userId: string;
+  fileName: string;
+  fileUrl: string;
+  fileSize: number;
+  uploadDate: string;
+  signed: boolean;
 }

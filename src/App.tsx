@@ -7,6 +7,7 @@ import AssignAssets from './pages/AssignAssets';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import MaintenanceRequests from './pages/MaintenanceRequests';
+import MaintenancePortal from './pages/MaintenancePortal';
 import HelpDesk from './pages/HelpDesk';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="profile" element={<Dashboard />} />
           <Route path="settings" element={<Settings />} />
           <Route path="maintenance-requests" element={<MaintenanceRequests />} />
+          <Route path="maintenance-portal" element={<MaintenancePortal />} />
           <Route path="help-desk" element={<HelpDesk />} />
         </Route>
       </Routes>
