@@ -1,22 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { 
-  Menu, 
-  X, 
-  BarChart3, 
-  Database, 
-  Settings, 
-  User, 
-  ChevronDown,
-  Package,
-  ClipboardCheck,
-  UserCheck,
-  TrendingUp,
-  Wrench,
-  HelpCircle,
-  FileText,
-  Tool
-} from 'lucide-react';
+import { Menu, X, BarChart3, Database, Settings, User, ChevronDown, Package, ClipboardCheck, UserCheck, TrendingUp, Wrench, HelpCircle, FileText, PenTool as Tool } from 'lucide-react';
 
 interface NavigationProps {
   isOpen: boolean;
