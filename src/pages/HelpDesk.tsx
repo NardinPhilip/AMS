@@ -138,7 +138,7 @@ export default function HelpDesk() {
               title="In Progress"
               value={requests.filter(r => r.status === 'in-progress').length}
               icon={AlertTriangle}
-              color="orange"
+              color="purple"
             />
             <MetricCard
               title="Completed Today"
