@@ -1,4 +1,4 @@
-import { BarChart3, PieChart, Users, Clock, Package, AlertTriangle, TrendingUp, TrendingDown, DollarSign, Activity, Zap, Shield, ClipboardCheck } from 'lucide-react';
+import { BarChart3, PieChart, Users, Clock, Package, AlertTriangle, TrendingUp, TrendingDown, DollarSign, Activity, Zap, Shield, ClipboardCheck, Wrench, Star, Target } from 'lucide-react';
 import { ChartConfiguration } from 'chart.js/auto';
 
 import Filters from '../components/Filters';
@@ -148,15 +148,15 @@ export default function Dashboard() {
     }
   };
 
-  const assetValueTrendConfig: ChartConfiguration = {
+  const maintenanceCostConfig: ChartConfiguration = {
     type: 'line',
     data: {
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       datasets: [{
-        label: 'Asset Value ($M)',
-        data: [2.1, 2.3, 2.2, 2.4, 2.6, 2.5, 2.7, 2.8, 2.6, 2.9, 3.0, 2.9],
-        borderColor: '#8b5cf6',
-        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+        label: 'Maintenance Costs ($)',
+        data: [8200, 12500, 9800, 15200, 11300, 7900, 13400, 10600, 9200, 14100, 12800, 11500],
+        borderColor: '#ef4444',
+        backgroundColor: 'rgba(239, 68, 68, 0.1)',
         fill: true,
         tension: 0.4
       }]
@@ -166,7 +166,7 @@ export default function Dashboard() {
       maintainAspectRatio: false,
       scales: {
         y: {
-          beginAtZero: false,
+          beginAtZero: true,
           grid: { color: '#e2e8f0' },
           ticks: { font: { size: 12 } }
         },
@@ -187,8 +187,8 @@ export default function Dashboard() {
       <div className="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 rounded-3xl p-8 mb-8 shadow-2xl relative overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-0 w-80 h-80 bg-purple-500 rounded-full blur-3xl"></div>
+          <div className="absolute top-0 left-0 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-80 h-80 bg-indigo-600/5 rounded-full blur-3xl"></div>
         </div>
         
         <div className="relative z-10">
@@ -229,65 +229,140 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Enhanced Key Metrics */}
+      {/* Enhanced Key Metrics - New Card Design */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <MetricCard
-          title="Total Assets"
-          value={mockMetrics.totalAssets.toLocaleString()}
-          icon={Package}
-          trend={{ value: 12, isPositive: true }}
-          color="blue"
-          className="transform hover:scale-105 transition-all duration-300"
-        />
-        <MetricCard
-          title="Active Assets"
-          value={mockMetrics.activeAssets.toLocaleString()}
-          icon={TrendingUp}
-          trend={{ value: 8, isPositive: true }}
-          color="green"
-          className="transform hover:scale-105 transition-all duration-300"
-        />
-        <MetricCard
-          title="Total Value"
-          value={`$${(mockMetrics.totalValue / 1000000).toFixed(1)}M`}
-          icon={DollarSign}
-          trend={{ value: 5, isPositive: true }}
-          color="purple"
-          className="transform hover:scale-105 transition-all duration-300"
-        />
-        <MetricCard
-          title="Monthly Depreciation"
-          value="$12.5K"
-          icon={TrendingDown}
-          trend={{ value: -2.1, isPositive: true }}
-          color="red"
-          className="transform hover:scale-105 transition-all duration-300"
-        />
+        {/* Total Assets Card */}
+        <div className="group relative">
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+          <div className="relative bg-white rounded-2xl p-6 shadow-xl">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                <Package className="w-6 h-6 text-white" />
+              </div>
+              <div className="text-sm font-medium text-emerald-600 bg-emerald-100 px-2 py-1 rounded-full">
+                +12%
+              </div>
+            </div>
+            <div className="space-y-1">
+              <p className="text-3xl font-bold text-slate-900">{mockMetrics.totalAssets.toLocaleString()}</p>
+              <p className="text-sm font-medium text-slate-600">Total Assets</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Active Assets Card */}
+        <div className="group relative">
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+          <div className="relative bg-white rounded-2xl p-6 shadow-xl">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
+                <TrendingUp className="w-6 h-6 text-white" />
+              </div>
+              <div className="text-sm font-medium text-emerald-600 bg-emerald-100 px-2 py-1 rounded-full">
+                +8%
+              </div>
+            </div>
+            <div className="space-y-1">
+              <p className="text-3xl font-bold text-slate-900">{mockMetrics.activeAssets.toLocaleString()}</p>
+              <p className="text-sm font-medium text-slate-600">Active Assets</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Total Value Card */}
+        <div className="group relative">
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+          <div className="relative bg-white rounded-2xl p-6 shadow-xl">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                <DollarSign className="w-6 h-6 text-white" />
+              </div>
+              <div className="text-sm font-medium text-emerald-600 bg-emerald-100 px-2 py-1 rounded-full">
+                +5%
+              </div>
+            </div>
+            <div className="space-y-1">
+              <p className="text-3xl font-bold text-slate-900">${(mockMetrics.totalValue / 1000000).toFixed(1)}M</p>
+              <p className="text-sm font-medium text-slate-600">Total Value</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Monthly Maintenance Cost Card */}
+        <div className="group relative">
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-red-600 to-orange-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+          <div className="relative bg-white rounded-2xl p-6 shadow-xl">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
+                <Wrench className="w-6 h-6 text-white" />
+              </div>
+              <div className="text-sm font-medium text-red-600 bg-red-100 px-2 py-1 rounded-full">
+                -2.1%
+              </div>
+            </div>
+            <div className="space-y-1">
+              <p className="text-3xl font-bold text-slate-900">${(mockMetrics.monthlyMaintenanceCost / 1000).toFixed(1)}K</p>
+              <p className="text-sm font-medium text-slate-600">Monthly Maintenance</p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Enhanced Alert Metrics */}
+      {/* Enhanced Alert Metrics - Hexagonal Design */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <MetricCard
-          title="Pending Audits"
-          value={mockMetrics.pendingAudits}
-          icon={Clock}
-          color="yellow"
-          className="transform hover:scale-105 transition-all duration-300"
-        />
-        <MetricCard
-          title="Overdue Audits"
-          value={mockMetrics.overdueAudits}
-          icon={AlertTriangle}
-          color="red"
-          className="transform hover:scale-105 transition-all duration-300"
-        />
-        <MetricCard
-          title="Maintenance Required"
-          value={mockMetrics.maintenanceRequired}
-          icon={Users}
-          color="yellow"
-          className="transform hover:scale-105 transition-all duration-300"
-        />
+        <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 rounded-3xl p-6 shadow-xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-amber-200/20 rounded-full -translate-y-16 translate-x-16"></div>
+          <div className="relative">
+            <div className="flex items-center space-x-4 mb-4">
+              <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
+                <Clock className="w-7 h-7 text-white" />
+              </div>
+              <div>
+                <p className="text-3xl font-bold text-amber-900">{mockMetrics.pendingAudits}</p>
+                <p className="text-sm font-medium text-amber-700">Pending Audits</p>
+              </div>
+            </div>
+            <div className="w-full bg-amber-200 rounded-full h-2">
+              <div className="bg-amber-500 h-2 rounded-full" style={{ width: '65%' }}></div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-red-50 to-pink-50 border-2 border-red-200 rounded-3xl p-6 shadow-xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-red-200/20 rounded-full -translate-y-16 translate-x-16"></div>
+          <div className="relative">
+            <div className="flex items-center space-x-4 mb-4">
+              <div className="w-14 h-14 bg-gradient-to-br from-red-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg">
+                <AlertTriangle className="w-7 h-7 text-white" />
+              </div>
+              <div>
+                <p className="text-3xl font-bold text-red-900">{mockMetrics.overdueAudits}</p>
+                <p className="text-sm font-medium text-red-700">Overdue Audits</p>
+              </div>
+            </div>
+            <div className="w-full bg-red-200 rounded-full h-2">
+              <div className="bg-red-500 h-2 rounded-full" style={{ width: '25%' }}></div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-3xl p-6 shadow-xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-blue-200/20 rounded-full -translate-y-16 translate-x-16"></div>
+          <div className="relative">
+            <div className="flex items-center space-x-4 mb-4">
+              <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg">
+                <Users className="w-7 h-7 text-white" />
+              </div>
+              <div>
+                <p className="text-3xl font-bold text-blue-900">{mockMetrics.maintenanceRequired}</p>
+                <p className="text-sm font-medium text-blue-700">Maintenance Required</p>
+              </div>
+            </div>
+            <div className="w-full bg-blue-200 rounded-full h-2">
+              <div className="bg-blue-500 h-2 rounded-full" style={{ width: '40%' }}></div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Filters */}
@@ -316,9 +391,9 @@ export default function Dashboard() {
           className="transform hover:scale-[1.02] transition-all duration-300"
         />
         <ChartCard
-          title="Asset Value Trend"
-          icon={<TrendingUp className="w-5 h-5 text-purple-600" />}
-          chartConfig={assetValueTrendConfig}
+          title="Maintenance Cost Trend"
+          icon={<Wrench className="w-5 h-5 text-red-600" />}
+          chartConfig={maintenanceCostConfig}
           className="transform hover:scale-[1.02] transition-all duration-300"
         />
       </div>
@@ -338,36 +413,69 @@ export default function Dashboard() {
         />
       </div>
 
-      {/* Quick Actions Panel */}
-      <div className="mt-8 bg-gradient-to-r from-blue-50 via-purple-50 to-blue-50 rounded-3xl p-8 border border-blue-200 shadow-xl">
-        <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center space-x-3">
-          <Zap className="w-6 h-6 text-blue-600" />
-          <span>Quick Actions</span>
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <button className="bg-white hover:bg-blue-50 border-2 border-blue-200 hover:border-blue-400 rounded-xl p-4 text-left transition-all duration-300 hover:shadow-lg group">
-            <Package className="w-8 h-8 text-blue-600 mb-3 group-hover:scale-110 transition-transform duration-200" />
-            <h3 className="font-semibold text-slate-900 mb-1">Add Asset</h3>
-            <p className="text-sm text-slate-600">Register new equipment</p>
-          </button>
+      {/* Enhanced Quick Actions Panel */}
+      <div className="mt-8 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 rounded-3xl p-8 border-2 border-blue-200 shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-64 h-64 bg-blue-300/10 rounded-full -translate-y-32 -translate-x-32"></div>
+        <div className="absolute bottom-0 right-0 w-48 h-48 bg-indigo-300/10 rounded-full translate-y-24 translate-x-24"></div>
+        
+        <div className="relative">
+          <h2 className="text-3xl font-bold text-slate-900 mb-2 flex items-center space-x-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
+              <Zap className="w-6 h-6 text-white" />
+            </div>
+            <span>Quick Actions</span>
+          </h2>
+          <p className="text-slate-600 mb-8">Streamline your workflow with these essential tools</p>
           
-          <button className="bg-white hover:bg-emerald-50 border-2 border-emerald-200 hover:border-emerald-400 rounded-xl p-4 text-left transition-all duration-300 hover:shadow-lg group">
-            <ClipboardCheck className="w-8 h-8 text-emerald-600 mb-3 group-hover:scale-110 transition-transform duration-200" />
-            <h3 className="font-semibold text-slate-900 mb-1">Start Audit</h3>
-            <p className="text-sm text-slate-600">Begin asset verification</p>
-          </button>
-          
-          <button className="bg-white hover:bg-purple-50 border-2 border-purple-200 hover:border-purple-400 rounded-xl p-4 text-left transition-all duration-300 hover:shadow-lg group">
-            <Users className="w-8 h-8 text-purple-600 mb-3 group-hover:scale-110 transition-transform duration-200" />
-            <h3 className="font-semibold text-slate-900 mb-1">Assign Assets</h3>
-            <p className="text-sm text-slate-600">Manage assignments</p>
-          </button>
-          
-          <button className="bg-white hover:bg-amber-50 border-2 border-amber-200 hover:border-amber-400 rounded-xl p-4 text-left transition-all duration-300 hover:shadow-lg group">
-            <BarChart3 className="w-8 h-8 text-amber-600 mb-3 group-hover:scale-110 transition-transform duration-200" />
-            <h3 className="font-semibold text-slate-900 mb-1">View Reports</h3>
-            <p className="text-sm text-slate-600">Generate analytics</p>
-          </button>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="group relative">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+              <button className="relative w-full bg-white hover:bg-blue-50 border-2 border-blue-200 hover:border-blue-400 rounded-2xl p-6 text-left transition-all duration-300 hover:shadow-xl group">
+                <Package className="w-10 h-10 text-blue-600 mb-4 group-hover:scale-110 transition-transform duration-200" />
+                <h3 className="font-bold text-slate-900 mb-2">Add Asset</h3>
+                <p className="text-sm text-slate-600">Register new equipment</p>
+                <div className="absolute top-4 right-4">
+                  <Star className="w-4 h-4 text-blue-400" />
+                </div>
+              </button>
+            </div>
+            
+            <div className="group relative">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+              <button className="relative w-full bg-white hover:bg-emerald-50 border-2 border-emerald-200 hover:border-emerald-400 rounded-2xl p-6 text-left transition-all duration-300 hover:shadow-xl group">
+                <ClipboardCheck className="w-10 h-10 text-emerald-600 mb-4 group-hover:scale-110 transition-transform duration-200" />
+                <h3 className="font-bold text-slate-900 mb-2">Start Audit</h3>
+                <p className="text-sm text-slate-600">Begin asset verification</p>
+                <div className="absolute top-4 right-4">
+                  <Target className="w-4 h-4 text-emerald-400" />
+                </div>
+              </button>
+            </div>
+            
+            <div className="group relative">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+              <button className="relative w-full bg-white hover:bg-purple-50 border-2 border-purple-200 hover:border-purple-400 rounded-2xl p-6 text-left transition-all duration-300 hover:shadow-xl group">
+                <Users className="w-10 h-10 text-purple-600 mb-4 group-hover:scale-110 transition-transform duration-200" />
+                <h3 className="font-bold text-slate-900 mb-2">Assign Assets</h3>
+                <p className="text-sm text-slate-600">Manage assignments</p>
+                <div className="absolute top-4 right-4">
+                  <Activity className="w-4 h-4 text-purple-400" />
+                </div>
+              </button>
+            </div>
+            
+            <div className="group relative">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-600 to-orange-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+              <button className="relative w-full bg-white hover:bg-amber-50 border-2 border-amber-200 hover:border-amber-400 rounded-2xl p-6 text-left transition-all duration-300 hover:shadow-xl group">
+                <BarChart3 className="w-10 h-10 text-amber-600 mb-4 group-hover:scale-110 transition-transform duration-200" />
+                <h3 className="font-bold text-slate-900 mb-2">View Reports</h3>
+                <p className="text-sm text-slate-600">Generate analytics</p>
+                <div className="absolute top-4 right-4">
+                  <TrendingUp className="w-4 h-4 text-amber-400" />
+                </div>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </>

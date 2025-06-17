@@ -136,36 +136,45 @@ export const mockUsers: User[] = [
 export const mockAuditTasks: AuditTask[] = [
   {
     id: 'AUD-001',
-    assetId: 'AST-001',
     assetName: 'Dell Laptop XPS 13',
     assignedTo: 'Emily Davis',
     dueDate: '2024-07-15',
     status: 'Pending',
     priority: 'Medium',
-    type: 'Routine',
-    notes: 'Regular 6-month audit check'
+    type: 'IT Assets',
+    notes: 'Regular 6-month audit check',
+    createdAt: '2024-01-15T10:00:00Z',
+    checklist: [],
+    missingAssets: [],
+    scannedAssets: []
   },
   {
     id: 'AUD-002',
-    assetId: 'AST-003',
     assetName: 'Toyota Camry 2023',
     assignedTo: 'Emily Davis',
     dueDate: '2024-04-20',
     status: 'Overdue',
     priority: 'High',
-    type: 'Maintenance',
-    notes: 'Vehicle maintenance inspection required'
+    type: 'IT Assets',
+    notes: 'Vehicle maintenance inspection required',
+    createdAt: '2024-01-20T10:00:00Z',
+    checklist: [],
+    missingAssets: [],
+    scannedAssets: []
   },
   {
     id: 'AUD-003',
-    assetId: 'AST-005',
     assetName: 'MacBook Pro 16"',
     assignedTo: 'Sarah Johnson',
     dueDate: '2024-08-12',
     status: 'In Progress',
     priority: 'Low',
-    type: 'Verification',
-    notes: 'Verify asset location and condition'
+    type: 'IT Assets',
+    notes: 'Verify asset location and condition',
+    createdAt: '2024-02-12T10:00:00Z',
+    checklist: [],
+    missingAssets: [],
+    scannedAssets: []
   }
 ];
 
@@ -177,5 +186,8 @@ export const mockMetrics: DashboardMetrics = {
   overdueAudits: 5,
   maintenanceRequired: 8,
   utilizationRate: 87,
-  complianceScore: 94
+  complianceScore: 94,
+  monthlyMaintenanceCost: 12500,
+  avgMaintenanceCost: 285,
+  totalMaintenanceCost: 45600
 };

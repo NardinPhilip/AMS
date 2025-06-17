@@ -100,6 +100,9 @@ export interface DashboardMetrics {
   maintenanceRequired: number;
   utilizationRate: number;
   complianceScore: number;
+  monthlyMaintenanceCost: number;
+  avgMaintenanceCost: number;
+  totalMaintenanceCost: number;
 }
 
 export interface FilterType {
@@ -129,7 +132,13 @@ export interface MaintenanceRequest {
   warrantyEligible?: boolean;
   warrantyUsed?: boolean;
   cost?: number;
+  estimatedCost?: number;
+  laborCost?: number;
+  partsCost?: number;
   resolution?: string;
+  timeSpent?: number; // in hours
+  approvedBy?: string;
+  approvedDate?: string;
 }
 
 export interface MaintenanceAttachment {
@@ -147,6 +156,9 @@ export interface HelpDeskEmployee {
   specialization: string[];
   workload: number;
   available: boolean;
+  hourlyRate?: number;
+  totalTicketsCompleted?: number;
+  avgResolutionTime?: number; // in hours
 }
 
 export interface Vendor {

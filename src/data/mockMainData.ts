@@ -145,7 +145,10 @@ export const mockHelpDeskEmployees: HelpDeskEmployee[] = [
     email: 'alex.martinez@company.com',
     specialization: ['Hardware', 'Network'],
     workload: 3,
-    available: true
+    available: true,
+    hourlyRate: 45,
+    totalTicketsCompleted: 127,
+    avgResolutionTime: 4.2
   },
   {
     id: 'HD-002',
@@ -153,7 +156,10 @@ export const mockHelpDeskEmployees: HelpDeskEmployee[] = [
     email: 'jessica.wong@company.com',
     specialization: ['Software', 'Hardware'],
     workload: 5,
-    available: true
+    available: true,
+    hourlyRate: 50,
+    totalTicketsCompleted: 203,
+    avgResolutionTime: 3.8
   },
   {
     id: 'HD-003',
@@ -161,7 +167,10 @@ export const mockHelpDeskEmployees: HelpDeskEmployee[] = [
     email: 'robert.kim@company.com',
     specialization: ['Network', 'Security'],
     workload: 2,
-    available: true
+    available: true,
+    hourlyRate: 55,
+    totalTicketsCompleted: 89,
+    avgResolutionTime: 5.1
   },
   {
     id: 'HD-004',
@@ -169,7 +178,10 @@ export const mockHelpDeskEmployees: HelpDeskEmployee[] = [
     email: 'maria.garcia@company.com',
     specialization: ['Software', 'Mobile'],
     workload: 4,
-    available: false
+    available: false,
+    hourlyRate: 48,
+    totalTicketsCompleted: 156,
+    avgResolutionTime: 3.5
   }
 ];
 
@@ -232,7 +244,13 @@ export const mockMaintenanceRequests: MaintenanceRequest[] = [
     estimatedCompletion: '2024-01-18T17:00:00Z',
     notes: 'Diagnosed as potential GPU issue. Replacement parts ordered.',
     warrantyEligible: true,
-    warrantyUsed: false
+    warrantyUsed: false,
+    estimatedCost: 350,
+    laborCost: 135,
+    partsCost: 215,
+    timeSpent: 3,
+    approvedBy: 'Sarah Johnson',
+    approvedDate: '2024-01-15T14:00:00Z'
   },
   {
     id: 'MR-002',
@@ -245,7 +263,8 @@ export const mockMaintenanceRequests: MaintenanceRequest[] = [
     status: 'pending',
     submittedDate: '2024-01-16T14:20:00Z',
     warrantyEligible: true,
-    warrantyUsed: false
+    warrantyUsed: false,
+    estimatedCost: 200
   },
   {
     id: 'MR-003',
@@ -264,7 +283,12 @@ export const mockMaintenanceRequests: MaintenanceRequest[] = [
     resolution: 'Replaced battery under Apple warranty. Device tested and working normally.',
     warrantyEligible: true,
     warrantyUsed: true,
-    cost: 0
+    cost: 0,
+    laborCost: 0,
+    partsCost: 0,
+    timeSpent: 1.5,
+    approvedBy: 'Sarah Johnson',
+    approvedDate: '2024-01-10T11:00:00Z'
   },
   {
     id: 'MR-004',
@@ -276,6 +300,33 @@ export const mockMaintenanceRequests: MaintenanceRequest[] = [
     category: 'software',
     status: 'pending',
     submittedDate: '2024-01-17T11:45:00Z',
-    warrantyEligible: false
+    warrantyEligible: false,
+    estimatedCost: 50,
+    laborCost: 50,
+    partsCost: 0
+  },
+  {
+    id: 'MR-005',
+    assetId: 'AST-005',
+    userId: '3',
+    title: 'Keyboard keys not responding',
+    description: 'Several keys on the laptop keyboard are not responding properly. Affects typing efficiency significantly.',
+    priority: 'high',
+    category: 'hardware',
+    status: 'completed',
+    submittedDate: '2024-01-08T08:30:00Z',
+    assignedTo: 'HD-002',
+    assignedType: 'helpdesk',
+    actualCompletion: '2024-01-10T15:00:00Z',
+    notes: 'Keyboard replacement completed successfully.',
+    resolution: 'Replaced faulty keyboard. All keys now functioning properly.',
+    warrantyEligible: true,
+    warrantyUsed: true,
+    cost: 120,
+    laborCost: 90,
+    partsCost: 30,
+    timeSpent: 2,
+    approvedBy: 'Sarah Johnson',
+    approvedDate: '2024-01-08T10:00:00Z'
   }
 ];

@@ -16,7 +16,10 @@ import {
   Download,
   MessageSquare,
   Settings,
-  TrendingUp
+  TrendingUp,
+  DollarSign,
+  Calculator,
+  Save
 } from 'lucide-react';
 import { mockMaintenanceRequests, mockHelpDeskEmployees, mockVendors } from '../data/mockMainData';
 import { MaintenanceRequest, HelpDeskEmployee, Vendor } from '../types';
@@ -34,6 +37,9 @@ export default function MaintenanceRequests() {
   const [assigneeType, setAssigneeType] = useState<'helpdesk' | 'vendor'>('helpdesk');
   const [selectedAssignee, setSelectedAssignee] = useState('');
   const [approvalNotes, setApprovalNotes] = useState('');
+  const [estimatedCost, setEstimatedCost] = useState('');
+  const [laborCost, setLaborCost] = useState('');
+  const [partsCost, setPartsCost] = useState('');
 
   const filteredRequests = requests.filter(request => {
     const matchesSearch = request.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -42,6 +48,23 @@ export default function MaintenanceRequests() {
     const matchesPriority = priorityFilter === 'all' || request.priority === priorityFilter;
     return matchesSearch && matchesStatus && matchesPriority;
   });
+
+  // Calculate total maintenance costs
+  const totalMaintenanceCost = requests
+    .filter(r => r.status === 'completed' && r.cost !== undefined)
+    .reduce((sum, r) => sum + (r.cost || 0), 0);
+
+  const avgMaintenanceCost = requests
+    .filter(r => r.status === 'completed' && r.cost !== undefined)
+    .reduce((sum, r, _, arr) => sum + (r.cost || 0) / arr.length, 0);
+
+  const monthlyMaintenanceCost = requests
+    .filter(r => {
+      const completedThisMonth = r.status === 'completed' && 
+        new Date(r.actualCompletion || '').getMonth() === new Date().getMonth();
+      return completedThisMonth && r.cost !== undefined;
+    })
+    .reduce((sum, r) => sum + (r.cost || 0), 0);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -75,6 +98,9 @@ export default function MaintenanceRequests() {
   const handleViewRequest = (request: MaintenanceRequest) => {
     setSelectedRequest(request);
     setApprovalNotes(request.notes || '');
+    setEstimatedCost(request.estimatedCost?.toString() || '');
+    setLaborCost(request.laborCost?.toString() || '');
+    setPartsCost(request.partsCost?.toString() || '');
     setIsModalOpen(true);
   };
 
@@ -87,7 +113,12 @@ export default function MaintenanceRequests() {
       assignedTo: selectedAssignee,
       assignedType: assigneeType,
       notes: approvalNotes,
-      estimatedCompletion: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days from now
+      estimatedCost: parseFloat(estimatedCost) || 0,
+      laborCost: parseFloat(laborCost) || 0,
+      partsCost: parseFloat(partsCost) || 0,
+      estimatedCompletion: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
+      approvedBy: 'Current Manager', // In real app, this would be the logged-in user
+      approvedDate: new Date().toISOString()
     };
 
     setRequests(requests.map(req => 
@@ -98,6 +129,9 @@ export default function MaintenanceRequests() {
     setSelectedRequest(null);
     setSelectedAssignee('');
     setApprovalNotes('');
+    setEstimatedCost('');
+    setLaborCost('');
+    setPartsCost('');
   };
 
   const handleRejectRequest = () => {
@@ -130,6 +164,18 @@ export default function MaintenanceRequests() {
     }
   };
 
+  const getAssigneeRate = (request: MaintenanceRequest) => {
+    if (!request.assignedTo) return 0;
+    
+    if (request.assignedType === 'helpdesk') {
+      const employee = employees.find(emp => emp.id === request.assignedTo);
+      return employee?.hourlyRate || 0;
+    } else {
+      const vendor = vendors.find(v => v.id === request.assignedTo);
+      return vendor?.hourlyRate || 0;
+    }
+  };
+
   return (
     <>
       {/* Header */}
@@ -156,6 +202,10 @@ export default function MaintenanceRequests() {
                   <Clock className="w-4 h-4" />
                   <span>{requests.filter(r => r.status === 'in-progress').length} In Progress</span>
                 </div>
+                <div className="flex items-center space-x-2">
+                  <DollarSign className="w-4 h-4" />
+                  <span>${monthlyMaintenanceCost.toLocaleString()} This Month</span>
+                </div>
               </div>
             </div>
           </div>
@@ -163,7 +213,7 @@ export default function MaintenanceRequests() {
       </div>
 
       {/* Summary Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
         <MetricCard
           title="Total Requests"
           value={requests.length}
@@ -188,6 +238,51 @@ export default function MaintenanceRequests() {
           icon={CheckCircle}
           color="green"
         />
+        <MetricCard
+          title="Total Cost"
+          value={`$${totalMaintenanceCost.toLocaleString()}`}
+          icon={DollarSign}
+          color="red"
+        />
+      </div>
+
+      {/* Cost Analytics */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-2xl p-6 shadow-xl">
+          <div className="flex items-center space-x-4 mb-4">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+              <DollarSign className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-blue-900">${monthlyMaintenanceCost.toLocaleString()}</p>
+              <p className="text-sm font-medium text-blue-700">Monthly Cost</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-200 rounded-2xl p-6 shadow-xl">
+          <div className="flex items-center space-x-4 mb-4">
+            <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center">
+              <Calculator className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-emerald-900">${Math.round(avgMaintenanceCost).toLocaleString()}</p>
+              <p className="text-sm font-medium text-emerald-700">Average Cost</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-200 rounded-2xl p-6 shadow-xl">
+          <div className="flex items-center space-x-4 mb-4">
+            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
+              <TrendingUp className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-purple-900">${totalMaintenanceCost.toLocaleString()}</p>
+              <p className="text-sm font-medium text-purple-700">Total Cost</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Search and Filters */}
@@ -245,6 +340,7 @@ export default function MaintenanceRequests() {
                 <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Request</th>
                 <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Priority</th>
                 <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Cost</th>
                 <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Submitted</th>
                 <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Assigned To</th>
                 <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Actions</th>
@@ -271,6 +367,20 @@ export default function MaintenanceRequests() {
                       <span className="ml-1">{request.status.replace('-', ' ')}</span>
                     </span>
                   </td>
+                  <td className="px-6 py-4">
+                    <div className="text-sm">
+                      {request.cost !== undefined ? (
+                        <span className="font-medium text-slate-900">${request.cost}</span>
+                      ) : request.estimatedCost ? (
+                        <span className="text-slate-600">~${request.estimatedCost}</span>
+                      ) : (
+                        <span className="text-slate-400">TBD</span>
+                      )}
+                    </div>
+                    {request.warrantyEligible && (
+                      <div className="text-xs text-blue-600">Warranty</div>
+                    )}
+                  </td>
                   <td className="px-6 py-4 text-sm text-slate-900">
                     {new Date(request.submittedDate).toLocaleDateString()}
                   </td>
@@ -279,6 +389,9 @@ export default function MaintenanceRequests() {
                     {request.assignedType && (
                       <div className="text-xs text-slate-500">
                         {request.assignedType === 'vendor' ? 'External Vendor' : 'Help Desk'}
+                        {request.assignedTo && (
+                          <span className="ml-1">(${getAssigneeRate(request)}/hr)</span>
+                        )}
                       </div>
                     )}
                   </td>
@@ -301,7 +414,7 @@ export default function MaintenanceRequests() {
       {/* Request Detail Modal */}
       {isModalOpen && selectedRequest && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-2xl p-8 max-w-5xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-slate-900">Maintenance Request Details</h2>
               <button
@@ -373,12 +486,47 @@ export default function MaintenanceRequests() {
                 </div>
               </div>
 
-              {/* Assignment and Approval */}
+              {/* Assignment and Cost Management */}
               <div className="space-y-6">
                 {selectedRequest.status === 'pending' && (
                   <div>
-                    <h3 className="text-lg font-semibold text-slate-900 mb-4">Assignment & Approval</h3>
+                    <h3 className="text-lg font-semibold text-slate-900 mb-4">Assignment & Cost Estimation</h3>
                     <div className="space-y-4">
+                      {/* Cost Estimation */}
+                      <div className="bg-slate-50 rounded-lg p-4 mb-4">
+                        <h4 className="font-semibold text-slate-900 mb-3">Cost Breakdown</h4>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Labor Cost ($)</label>
+                            <input
+                              type="number"
+                              value={laborCost}
+                              onChange={(e) => setLaborCost(e.target.value)}
+                              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                              placeholder="0"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Parts Cost ($)</label>
+                            <input
+                              type="number"
+                              value={partsCost}
+                              onChange={(e) => setPartsCost(e.target.value)}
+                              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                              placeholder="0"
+                            />
+                          </div>
+                        </div>
+                        <div className="mt-3 pt-3 border-t border-slate-200">
+                          <div className="flex justify-between items-center">
+                            <span className="font-medium text-slate-700">Total Estimated Cost:</span>
+                            <span className="text-lg font-bold text-slate-900">
+                              ${((parseFloat(laborCost) || 0) + (parseFloat(partsCost) || 0)).toLocaleString()}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
                       <div>
                         <label className="block text-sm font-medium text-slate-700 mb-2">Assign To</label>
                         <div className="flex space-x-4 mb-4">
@@ -413,12 +561,12 @@ export default function MaintenanceRequests() {
                           {assigneeType === 'helpdesk' 
                             ? employees.filter(emp => emp.available).map(employee => (
                                 <option key={employee.id} value={employee.id}>
-                                  {employee.name} (Workload: {employee.workload})
+                                  {employee.name} (Workload: {employee.workload}, ${employee.hourlyRate}/hr)
                                 </option>
                               ))
                             : vendors.map(vendor => (
                                 <option key={vendor.id} value={vendor.id}>
-                                  {vendor.name} (${vendor.hourlyRate}/hr)
+                                  {vendor.name} (${vendor.hourlyRate}/hr, Rating: {vendor.rating})
                                 </option>
                               ))
                           }
@@ -466,8 +614,48 @@ export default function MaintenanceRequests() {
                         <p className="text-slate-900 font-medium">{getAssigneeName(selectedRequest)}</p>
                         <p className="text-sm text-slate-600">
                           {selectedRequest.assignedType === 'vendor' ? 'External Vendor' : 'Help Desk Team'}
+                          {selectedRequest.assignedTo && (
+                            <span className="ml-1">(${getAssigneeRate(selectedRequest)}/hr)</span>
+                          )}
                         </p>
                       </div>
+
+                      {/* Cost Information */}
+                      {(selectedRequest.estimatedCost || selectedRequest.cost) && (
+                        <div className="bg-slate-50 rounded-lg p-4">
+                          <h4 className="font-semibold text-slate-900 mb-3">Cost Information</h4>
+                          <div className="space-y-2 text-sm">
+                            {selectedRequest.laborCost && (
+                              <div className="flex justify-between">
+                                <span className="text-slate-600">Labor Cost:</span>
+                                <span className="font-medium text-slate-900">${selectedRequest.laborCost}</span>
+                              </div>
+                            )}
+                            {selectedRequest.partsCost && (
+                              <div className="flex justify-between">
+                                <span className="text-slate-600">Parts Cost:</span>
+                                <span className="font-medium text-slate-900">${selectedRequest.partsCost}</span>
+                              </div>
+                            )}
+                            {selectedRequest.timeSpent && (
+                              <div className="flex justify-between">
+                                <span className="text-slate-600">Time Spent:</span>
+                                <span className="font-medium text-slate-900">{selectedRequest.timeSpent}h</span>
+                              </div>
+                            )}
+                            <div className="pt-2 border-t border-slate-200">
+                              <div className="flex justify-between">
+                                <span className="font-medium text-slate-700">
+                                  {selectedRequest.status === 'completed' ? 'Final Cost:' : 'Estimated Cost:'}
+                                </span>
+                                <span className="text-lg font-bold text-slate-900">
+                                  ${(selectedRequest.cost || selectedRequest.estimatedCost || 0).toLocaleString()}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                       
                       {selectedRequest.estimatedCompletion && (
                         <div>
@@ -497,10 +685,15 @@ export default function MaintenanceRequests() {
                         </div>
                       )}
 
-                      {selectedRequest.cost !== undefined && (
+                      {selectedRequest.approvedBy && (
                         <div>
-                          <label className="block text-sm font-medium text-slate-700 mb-1">Total Cost</label>
-                          <p className="text-slate-900 font-semibold">${selectedRequest.cost}</p>
+                          <label className="block text-sm font-medium text-slate-700 mb-1">Approved By</label>
+                          <p className="text-slate-900">{selectedRequest.approvedBy}</p>
+                          {selectedRequest.approvedDate && (
+                            <p className="text-sm text-slate-600">
+                              on {new Date(selectedRequest.approvedDate).toLocaleString()}
+                            </p>
+                          )}
                         </div>
                       )}
                     </div>
