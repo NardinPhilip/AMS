@@ -1,4 +1,4 @@
-import { BarChart3, PieChart, Users, Clock, Package, AlertTriangle, TrendingUp, TrendingDown, DollarSign, Activity, Zap, Shield } from 'lucide-react';
+import { BarChart3, PieChart, Users, Clock, Package, AlertTriangle, TrendingUp, TrendingDown, DollarSign, Activity, Zap, Shield, ClipboardCheck } from 'lucide-react';
 import { ChartConfiguration } from 'chart.js/auto';
 
 import Filters from '../components/Filters';
